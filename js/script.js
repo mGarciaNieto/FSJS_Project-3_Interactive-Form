@@ -28,7 +28,6 @@ otherJobRoleInput.style.visibility = 'hidden'
 
 /**
  * If Other is selected from the Job Role menu, it displays Other Job Role Input, otherwise remains hidden.
- *
  * @param  {event type} 'change'
  * @param  {listener} (e)
  */
@@ -38,7 +37,6 @@ jobRoleSelect.addEventListener('change', (e) => {
 
 /**
  * Disables the color select drop down menu.
- *
  * @param  {name String} 'disabled'
  * @param  {value boolean} true
  */
@@ -46,7 +44,6 @@ colorSelect.setAttribute('disabled', true)
 
 /**
  * Displays color options depending on Design Theme selection.
- *
  * @param  {event type} 'change'
  * @param  {listener} e
  */
@@ -66,6 +63,11 @@ designSelect.addEventListener('change', (e) => {
   }
 })
 
+/**
+ *
+ * @param  {event type} 'change'
+ * @param  {listener} (e)
+ */
 activitiesFieldset.addEventListener('change', (e) => {
   const checkedValue = Number(e.target.getAttribute('data-cost'))
   if (e.target.checked) {
@@ -86,8 +88,10 @@ activitiesFieldset.addEventListener('change', (e) => {
   }
 })
 
-console.log(checkBoxes)
-
+/**
+ * Sets the focus on the selected checkbox or removes it.
+ * @param  {iterator} checkBox
+ */
 for (const checkBox of checkBoxes) {
   checkBox.addEventListener('focus', (e) => {
     e.target.parentElement.classList.add('focus')
