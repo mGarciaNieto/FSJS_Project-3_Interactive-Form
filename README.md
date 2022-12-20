@@ -3,3 +3,4 @@ The third of ten projects for the Full Stack JavaScript Techdegree program at Tr
 ## Real time validation and conditional error messages
 - Required inputs have real time validation
 - Name input has conditional error messages depending on adding spaces or leave name blank
+> Ready for grading...
