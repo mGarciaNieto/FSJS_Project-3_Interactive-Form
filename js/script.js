@@ -140,6 +140,11 @@ paymentMethod.addEventListener('change', (e) => {
   }
 })
 
+/**
+ * Form submit button 
+ * @param  {event type} 'submit'
+ * @param  {listener} (e)
+ */
 form.addEventListener('submit', (e) => {
   for (const field of requiredFields) {
     if (validationOK(field)) {
@@ -154,9 +159,12 @@ form.addEventListener('submit', (e) => {
   }
 })
 
+/**
+ * Methods to be use for validation
+ */
 const validatingMethods = {
   nameCheck(name) {
-    return (name !== '' || name.length !== 0) && /^[a-zA-Z].*[\s\.]*$/.test(name) 
+    return (name !== '' || name.length !== 0) && /^[a-zA-Z].*[\s\.]*$/.test(name)
   },
   emailCheck(email) {
     return /^[a-zA-Z0-9]{2,}@[a-zA-Z0-9]{2,10}\.(cat|es|org|com)$/i.test(email)
@@ -181,6 +189,9 @@ const validatingMethods = {
   }
 }
 
+/**
+ * Check required fields validation
+ */
 const validationOK = function (field) {
   if (field.id === 'name') return validatingMethods.nameCheck(field.value)
   if (field.id === 'email') return validatingMethods.emailCheck(field.value)
@@ -196,24 +207,41 @@ const validationOK = function (field) {
   }
 }
 
+/**
+ * Shows validation hint
+ */
 const displayHint = function (label, hint) {
   label.classList.add('not-valid')
   label.classList.remove('valid')
   hint.style.display = 'block'
 }
 
+/**
+ * Hides validation hint
+ */
 const removeHint = function (label, hint) {
   label.classList.add('valid')
   label.classList.remove('not-valid')
   hint.style.display = ''
 }
 
+/**
+ * Adds event listener and checks validation
+ * @param  {type of input} input
+ * @param  {input's label} label
+ * @param  {input's hint} hint
+ * @param  {event type} {input.addEventListener('keyup'
+ * @param  {listener} e
+ */
 const eventInputTarget = function (input, label, hint) {
   input.addEventListener('keyup', (e) => {
     validationOK(input) ? removeHint(label, hint) : displayHint(label, hint)
   })
 }
 
+/**
+ * Loops over all required fields finding required inputs and adding event listeners
+ */
 for (const field of requiredFields) {
   if (field.tagName === 'INPUT') {
     eventInputTarget(field, field.parentElement, field.parentElement.lastElementChild)
