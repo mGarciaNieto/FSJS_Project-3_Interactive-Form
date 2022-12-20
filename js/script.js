@@ -18,10 +18,14 @@ const paymentMethod = document.getElementById('payment')
 const creditCardMethod = document.getElementById('credit-card')
 const paypalMethod = document.getElementById('paypal')
 const bitcoinMethod = document.getElementById('bitcoin')
+const expirationMonth = document.getElementById('exp-month')
+const expirationYear = document.getElementById('exp-year')
 const cardNumber = document.getElementById('cc-num')
 const zipCode = document.getElementById('zip')
 const cvv = document.getElementById('cvv')
 const form = document.querySelector('form')
+const requiredFields = document.querySelectorAll('.error-border')
+const nameHint = document.getElementById('name-hint')
 
 /* Variables
 ---------------------------------------------------------- */
@@ -110,7 +114,7 @@ for (const checkBox of checkBoxes) {
   })
 }
 
-// Hides paypal and bitcoin method and sets credit card method default.
+// Hides paypal and bitcoin payment method and sets credit card payment method to default.
 paypalMethod.setAttribute('hidden', true)
 bitcoinMethod.setAttribute('hidden', true)
 paymentMethod.selectedIndex = 1
@@ -125,18 +129,93 @@ paymentMethod.addEventListener('change', (e) => {
     creditCardMethod.removeAttribute('hidden')
     paypalMethod.setAttribute('hidden', true)
     bitcoinMethod.setAttribute('hidden', true)
-  } else if(e.target.value === paypalMethod.id){
+  } else if (e.target.value === paypalMethod.id) {
     paypalMethod.removeAttribute('hidden')
     creditCardMethod.setAttribute('hidden', true)
     bitcoinMethod.setAttribute('hidden', true)
-  }else{
+  } else {
     bitcoinMethod.removeAttribute('hidden')
     creditCardMethod.setAttribute('hidden', true)
     paypalMethod.setAttribute('hidden', true)
   }
 })
 
-
 form.addEventListener('submit', (e) => {
-   e.preventDefault()
+  for (const field of requiredFields) {
+    if (validationOK(field)) {
+      removeHint(field.parentElement, field.parentElement.lastElementChild)
+    } else {
+      displayHint(field.parentElement, field.parentElement.lastElementChild)
+      if (field.id === 'name') {
+        field.value.includes(' ') ? (nameHint.innerText = 'No spaces allowed!') : (nameHint.innerText = 'Name field cannot be blank.')
+      }
+      e.preventDefault()
+    }
+  }
 })
+
+const validatingMethods = {
+  nameCheck(name) {
+    return (name !== '' || name.length !== 0) && /^[a-zA-Z].*[\s\.]*$/.test(name) 
+  },
+  emailCheck(email) {
+    return /^[a-zA-Z0-9]{2,}@[a-zA-Z0-9]{2,10}\.(cat|es|org|com)$/i.test(email)
+  },
+  activitiesCheck() {
+    return activitiesFieldset.querySelector('input[type=checkbox]:checked') ? true : false
+  },
+  expiryMonthCheck() {
+    return expirationMonth.selectedIndex !== 0
+  },
+  expiryYearcheck() {
+    return expirationYear.selectedIndex !== 0
+  },
+  ccNumCheck() {
+    return /^[0-9]{13,16}$/.test(cardNumber.value)
+  },
+  zipCodeCheck() {
+    return /^[0-9]{5}$/.test(zipCode.value)
+  },
+  cvvCheck() {
+    return /^\d{3}$/.test(cvv.value)
+  }
+}
+
+const validationOK = function (field) {
+  if (field.id === 'name') return validatingMethods.nameCheck(field.value)
+  if (field.id === 'email') return validatingMethods.emailCheck(field.value)
+  if (field.id === 'activities-box') return validatingMethods.activitiesCheck()
+  if (paymentMethod.value === 'credit-card') {
+    if (field.id === 'exp-month') return validatingMethods.expiryMonthCheck()
+    if (field.id === 'exp-year') return validatingMethods.expiryYearcheck()
+    if (field.id === 'cc-num') return validatingMethods.ccNumCheck()
+    if (field.id === 'zip') return validatingMethods.zipCodeCheck()
+    if (field.id === 'cvv') return validatingMethods.cvvCheck()
+  } else {
+    return true
+  }
+}
+
+const displayHint = function (label, hint) {
+  label.classList.add('not-valid')
+  label.classList.remove('valid')
+  hint.style.display = 'block'
+}
+
+const removeHint = function (label, hint) {
+  label.classList.add('valid')
+  label.classList.remove('not-valid')
+  hint.style.display = ''
+}
+
+const eventInputTarget = function (input, label, hint) {
+  input.addEventListener('keyup', (e) => {
+    validationOK(input) ? removeHint(label, hint) : displayHint(label, hint)
+  })
+}
+
+for (const field of requiredFields) {
+  if (field.tagName === 'INPUT') {
+    eventInputTarget(field, field.parentElement, field.parentElement.lastElementChild)
+  }
+}
