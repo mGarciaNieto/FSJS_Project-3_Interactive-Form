@@ -36,7 +36,7 @@ let totalCost = 0
  */
 nameInput.focus()
 
-//
+// Hides the Other job role? input
 otherJobRoleInput.style.visibility = 'hidden'
 
 /**
@@ -152,6 +152,7 @@ form.addEventListener('submit', (e) => {
     } else {
       displayHint(field.parentElement, field.parentElement.lastElementChild)
       if (field.id === 'name') {
+        // this gets triggered after pressing the submit button
         field.value.includes(' ') ? (nameHint.innerText = 'No spaces allowed!') : (nameHint.innerText = 'Name field cannot be blank.')
       }
       e.preventDefault()
@@ -160,7 +161,7 @@ form.addEventListener('submit', (e) => {
 })
 
 /**
- * Methods to be use for validation
+ * Methods to be used for validation
  */
 const validatingMethods = {
   nameCheck(name) {
@@ -230,7 +231,7 @@ const removeHint = function (label, hint) {
  * @param  {type of input} input
  * @param  {input's label} label
  * @param  {input's hint} hint
- * @param  {event type} {input.addEventListener('keyup'
+ * @param  {event type} 'keyup'
  * @param  {listener} e
  */
 const eventInputTarget = function (input, label, hint) {
