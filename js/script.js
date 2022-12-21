@@ -94,7 +94,7 @@ activitiesFieldset.addEventListener('change', (e) => {
     if (e.target.checked && e.target !== checkBox && checkBox.getAttribute('data-day-and-time') === e.target.getAttribute('data-day-and-time')) {
       checkBox.setAttribute('disabled', true)
       checkBox.parentElement.classList.add('disabled')
-    } else if (!e.target.checked) {
+    } else if (!e.target.checked && e.target !== checkBox && checkBox.getAttribute('data-day-and-time') === e.target.getAttribute('data-day-and-time')) {
       checkBox.removeAttribute('disabled')
       checkBox.parentElement.classList.remove('disabled')
     }
@@ -164,7 +164,7 @@ form.addEventListener('submit', (e) => {
  */
 const validatingMethods = {
   nameCheck(name) {
-    return (name !== '' || name.length !== 0) && /^[a-zA-Z].*[\s\.]*$/.test(name)
+    return (name !== '' || name.length !== 0) && /^[a-zA-Z]*[^\s\.]*$/.test(name)
   },
   emailCheck(email) {
     return /^[a-zA-Z0-9]{2,}@[a-zA-Z0-9]{2,10}\.(cat|es|org|com)$/i.test(email)
@@ -175,7 +175,7 @@ const validatingMethods = {
   expiryMonthCheck() {
     return expirationMonth.selectedIndex !== 0
   },
-  expiryYearcheck() {
+  expiryYearCheck() {
     return expirationYear.selectedIndex !== 0
   },
   ccNumCheck() {
@@ -198,7 +198,7 @@ const validationOK = function (field) {
   if (field.id === 'activities-box') return validatingMethods.activitiesCheck()
   if (paymentMethod.value === 'credit-card') {
     if (field.id === 'exp-month') return validatingMethods.expiryMonthCheck()
-    if (field.id === 'exp-year') return validatingMethods.expiryYearcheck()
+    if (field.id === 'exp-year') return validatingMethods.expiryYearCheck()
     if (field.id === 'cc-num') return validatingMethods.ccNumCheck()
     if (field.id === 'zip') return validatingMethods.zipCodeCheck()
     if (field.id === 'cvv') return validatingMethods.cvvCheck()
@@ -241,6 +241,7 @@ const eventInputTarget = function (input, label, hint) {
 
 /**
  * Loops over all required fields finding required inputs and adding event listeners
+ * @param  {iterator} field 
  */
 for (const field of requiredFields) {
   if (field.tagName === 'INPUT') {
