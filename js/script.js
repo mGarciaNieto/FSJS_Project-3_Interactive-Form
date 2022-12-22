@@ -141,7 +141,7 @@ paymentMethod.addEventListener('change', (e) => {
 })
 
 /**
- * Form submit button 
+ * Form submit button
  * @param  {event type} 'submit'
  * @param  {listener} (e)
  */
@@ -151,10 +151,6 @@ form.addEventListener('submit', (e) => {
       removeHint(field.parentElement, field.parentElement.lastElementChild)
     } else {
       displayHint(field.parentElement, field.parentElement.lastElementChild)
-      if (field.id === 'name') {
-        // this gets triggered after pressing the submit button
-        field.value.includes(' ') ? (nameHint.innerText = 'No spaces allowed!') : (nameHint.innerText = 'Name field cannot be blank.')
-      }
       e.preventDefault()
     }
   }
@@ -236,13 +232,20 @@ const removeHint = function (label, hint) {
  */
 const eventInputTarget = function (input, label, hint) {
   input.addEventListener('keyup', (e) => {
-    validationOK(input) ? removeHint(label, hint) : displayHint(label, hint)
+    if (validationOK(input)) {
+      removeHint(label, hint)
+    } else {
+      displayHint(label, hint)
+      if (input.id === 'name') {
+        input.value.includes(' ') ? (nameHint.innerText  = 'No spaces allowed!') : (nameHint.innerText = 'Name field cannot be blank_.')
+      } 
+    }
   })
 }
 
 /**
  * Loops over all required fields finding required inputs and adding event listeners
- * @param  {iterator} field 
+ * @param  {iterator} field
  */
 for (const field of requiredFields) {
   if (field.tagName === 'INPUT') {
